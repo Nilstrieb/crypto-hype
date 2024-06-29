@@ -9,7 +9,7 @@ macro_rules! undefine_variable {
         };
     };
 }
-use std::{fmt::{Debug, Display}, str::FromStr};
+use std::{fmt::{Debug, Display}, num::Wrapping, str::FromStr};
 
 pub(crate) use undefine_variable;
 
@@ -56,5 +56,14 @@ impl<const LEN_BYTES: usize> Display for Fingerprint<LEN_BYTES> {
 impl<const LEN_BYTES: usize> Debug for Fingerprint<LEN_BYTES> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         Display::fmt(self, f)
+    }
+}
+
+pub trait WrappingExt {
+    fn w_rotate_left(self, amount: u32) -> Self;
+}
+impl WrappingExt for Wrapping<u32> {
+    fn w_rotate_left(self, amount: u32) -> Self {
+        Self(self.0.rotate_left(amount))
     }
 }
